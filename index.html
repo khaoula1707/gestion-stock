@@ -1,0 +1,192 @@
+<script>
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
+  
+<!DOCTYPE html>
+<html lang="fr">
+<head>     
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Stock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="script.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#007bff',
+                        secondary: '#6c757d',
+                        danger: '#dc3545',
+                        warning: '#ffc107',
+                        success: '#28a745'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <script>
+        function logout() {
+          localStorage.removeItem("loggedIn");
+          window.location.href = "login.html";
+        }
+      </script>
+    <header class="bg-primary text-white py-6 shadow-md">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold"><i class="fas fa-boxes mr-2"></i>Gestionnaire de Stock</h1>
+            <button onclick="logout()" class="bg-white text-primary font-semibold px-4 py-2 rounded hover:bg-gray-100 transition">Déconnexion</button>
+            <p id="welcome-message" class="text-lg font-medium"></p>
+        </div>
+      </header>
+      
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <section id="add-entry" class="bg-white p-6 rounded-lg shadow-md">
+
+                <h2 class="text-xl font-semibold mb-4 text-primary"><i class="fas fa-plus-circle mr-2"></i>Ajouter une Entrée</h2>
+                <form class="space-y-4">
+                    <div>
+                        <label for="article" class="block text-sm font-medium text-gray-700">Article:</label>
+                        <select id="article" onchange="handleArticleChange()" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" required>
+                            <!-- Options ajoutées dynamiquement -->
+                        </select>
+                    </div>
+                    
+                    <div id="custom-article-fields" class="hidden">
+                        <div class="mt-4">
+                            <label for="custom-code" class="block text-sm font-medium text-gray-700">Code de l'article:</label>
+                            <input type="text" id="custom-code" placeholder="Ex : XX-999" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                        </div>
+                        <div class="mt-4">
+                            <label for="custom-name" class="block text-sm font-medium text-gray-700">Nom de l'article:</label>
+                            <input type="text" id="custom-name" placeholder="Nom personnalisé" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="quantity-add" class="block text-sm font-medium text-gray-700">Quantité à ajouter:</label>
+                        <input type="number" id="quantity-add" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" required>
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                        <i class="fas fa-plus mr-2"></i>Ajouter
+                    </button>
+                </form>
+            </section>
+
+            <section id="add-exit" class="bg-white p-6 rounded-lg shadow-md">
+
+                <h2 class="text-xl font-semibold mb-4 text-primary"><i class="fas fa-minus-circle mr-2"></i>Ajouter une Sortie</h2>
+                <form class="space-y-4">
+                    <div>
+                        <label for="article-exit" class="block text-sm font-medium text-gray-700">Article:</label>
+                        <select id="article-exit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" required>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="quantity-exit" class="block text-sm font-medium text-gray-700">Quantité à retirer:</label>
+                        <input type="number" id="quantity-exit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary" required>
+                    </div>
+                    <div>
+                        <label for="service" class="block text-sm font-medium text-gray-700">Service:</label>
+                        <select id="service" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                            <option value="" disabled selected hidden>-- Choisir un service --</option>
+                            <option value="service1">Écriture privée</option>
+                            <option value="service2">Affaires administratives</option>
+                            <option value="service3">État civil & correction</option>
+                            <option value="service4">Gestion financière & marchés</option>
+                            <option value="service5">Urbanisme</option>
+                            <option value="service6">Travaux</option>
+                            <option value="service7">Animation locale</option>
+                            <option value="service8">Moyens communs</option>
+                            <option value="service9">Environnement & développement durable</option>
+                            <option value="service10">Affaires économiques & police</option>
+                        </select>
+                        
+                    </div>
+                    <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                        <i class="fas fa-minus mr-2"></i>Retirer
+                    </button>
+                </form>
+            </section>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 gap-6">
+            <section class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4 text-primary"><i class="fas fa-boxes mr-2"></i>Stock Actuel</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Article</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantité</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stock-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Stock items will be populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4 text-primary"><i class="fas fa-history mr-2"></i>Historique des Transactions</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date/Heure</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Article</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantité</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Transaction history will be populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <div class="mt-4 flex justify-end gap-4">
+            <button onclick="exportStockToCSV()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-box mr-2"></i>Exporter le Stock
+            </button>
+            <button onclick="exportHistoryToCSV()" class="bg-success hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-file-csv mr-2"></i>Exporter l’Historique
+            </button>
+        </div>
+        <button onclick="clearHistory()" class="bg-danger hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            <i class="fas fa-trash-alt mr-2"></i>Vider l’Historique
+        </button>
+        
+        
+    </main>
+    
+    <div id="toast-container" class="fixed bottom-4 right-4 space-y-2 z-50"></div>
+
+    <footer class="bg-gray-100 py-4 mt-8">
+        <div class="container mx-auto px-4 text-center text-gray-600">
+            <p>&copy; 2023 Gestionnaire de Stock. Tous droits réservés.</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const user = localStorage.getItem("currentUser");
+          if (user) {
+            document.getElementById("welcome-message").textContent = `Bienvenue, ${user}`;
+          }
+        });
+    </script>
+</body>
+
+  
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connexion | Stock</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#007bff'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center text-primary">Gestionnaire de Stock</h2>
+
+    <!-- Connexion -->
+    <form id="login-form" class="space-y-4">
+      <h3 class="text-lg font-semibold text-gray-700">Connexion</h3>
+      <input type="email" id="login-email" placeholder="Email" required class="w-full p-2 border rounded-md">
+      <input type="password" id="login-password" placeholder="Mot de passe" required class="w-full p-2 border rounded-md">
+      <div id="login-error" class="text-red-600 text-sm hidden">❌ Email ou mot de passe incorrect.</div>
+      <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-blue-700">Se connecter</button>
+      <p class="text-sm text-center">Nouveau ? <a href="#" class="text-blue-600 underline" onclick="toggleForms()">Créer un compte</a></p>
+    </form>
+
+    <!-- Inscription -->
+    <form id="register-form" class="space-y-4 hidden">
+      <h3 class="text-lg font-semibold text-gray-700">Créer un compte</h3>
+      <input type="text" id="register-name" placeholder="Nom complet" required class="w-full p-2 border rounded-md">
+      <input type="email" id="register-email" placeholder="Email" required class="w-full p-2 border rounded-md">
+      <input type="password" id="register-password" placeholder="Mot de passe" required class="w-full p-2 border rounded-md">
+      <div id="register-error" class="text-red-600 text-sm hidden">⚠️ Cet email est déjà utilisé.</div>
+      <div id="register-success" class="text-green-600 text-sm hidden">✅ Compte créé avec succès ! Vous pouvez vous connecter.</div>
+      <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">S'inscrire</button>
+      <p class="text-sm text-center">Déjà inscrit ? <a href="#" class="text-blue-600 underline" onclick="toggleForms()">Se connecter</a></p>
+    </form>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("login-form");
+    const registerForm = document.getElementById("register-form");
+
+    function toggleForms() {
+      loginForm.classList.toggle("hidden");
+      registerForm.classList.toggle("hidden");
+      document.getElementById("register-success").classList.add("hidden");
+      document.getElementById("login-error").classList.add("hidden");
+      document.getElementById("register-error").classList.add("hidden");
+    }
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem("users")) || {};
+    }
+
+    // 🔐 Connexion
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value.trim();
+      const users = getUsers();
+
+      if (users[email] && users[email].password === password) {
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("currentUserName", users[email].name);
+        localStorage.setItem("currentUserEmail", email);
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("login-error").classList.remove("hidden");
+      }
+    });
+
+    // 🆕 Inscription
+    registerForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("register-name").value.trim();
+      const email = document.getElementById("register-email").value.trim();
+      const password = document.getElementById("register-password").value.trim();
+      const users = getUsers();
+
+      if (users[email]) {
+        document.getElementById("register-error").classList.remove("hidden");
+        document.getElementById("register-success").classList.add("hidden");
+      } else {
+        users[email] = { name, password };
+        localStorage.setItem("users", JSON.stringify(users));
+        document.getElementById("register-error").classList.add("hidden");
+        document.getElementById("register-success").classList.remove("hidden");
+        registerForm.reset();
+      }
+    });
+  </script>
+</body>
+</html>

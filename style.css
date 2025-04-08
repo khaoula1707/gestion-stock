@@ -1,0 +1,96 @@
+/* Reset some default styles */
+body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; /* Updated font */
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 4px solid #0056b3; /* Added border */
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px; /* Centering the content */
+    margin: auto;
+}
+
+section {
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Enhanced shadow */
+    display: flex; /* Flexbox for layout */
+    justify-content: space-between; /* Space between forms */
+}
+
+h2 {
+    margin-bottom: 15px;
+    color: #007bff; /* Updated heading color */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 48%; /* Adjust width for two-column layout */
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input[type="number"], select {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s; /* Smooth transition */
+}
+
+button:hover {
+    background: #0056b3; /* Darker on hover */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Space above the table */
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    background: #007bff;
+    color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Zebra striping for table rows */
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1; /* Highlight on hover */
+}

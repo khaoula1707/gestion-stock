@@ -81,75 +81,7 @@ if (!Array.isArray(stockItems) || stockItems.length === 0) {
 
 let history = JSON.parse(localStorage.getItem("history")) || [];
 
-function exportHistoryToCSV() {
-    const rows = [['Date/Heure', 'Type', 'Article', 'Quantité', 'Service']];
-    const table = document.getElementById('history-table-body');
-    const trElements = table.querySelectorAll('tr');
 
-    trElements.forEach(tr => {
-        const cells = tr.querySelectorAll('td');
-        const row = Array.from(cells).map(cell => cell.innerText);
-        rows.push(row);
-    });
-
-    let csvContent = rows.map(e => e.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    const link = document.createElement("a");
-    link.setAttribute("href", URL.createObjectURL(blob));
-    link.setAttribute("download", "historique_stock.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-function exportStockToCSV() {
-    const rows = [['Code', 'Article', 'Quantité']];
-    const stock = JSON.parse(localStorage.getItem("stockItems")) || [];
-
-    stock.forEach(item => {
-        rows.push([item.code, item.article, item.quantity]);
-    });
-
-    const csvContent = rows.map(e => e.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    const link = document.createElement("a");
-    link.setAttribute("href", URL.createObjectURL(blob));
-    link.setAttribute("download", "stock_actuel.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-registerForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-  
-    const name = document.getElementById("register-name").value.trim();
-    const email = document.getElementById("register-email").value.trim();
-    const password = document.getElementById("register-password").value.trim();
-    const users = getUsers();
-  
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert("📧 Email invalide. Veuillez entrer une adresse correcte.");
-      return;
-    }
-  
-    if (password.length < 6) {
-      alert("🔒 Le mot de passe doit contenir au moins 6 caractères.");
-      return;
-    }
-  
-    if (users[email]) {
-      document.getElementById("register-error").classList.remove("hidden");
-      document.getElementById("register-success").classList.add("hidden");
-    } else {
-      users[email] = { name, password };
-      localStorage.setItem("users", JSON.stringify(users));
-      document.getElementById("register-error").classList.add("hidden");
-      document.getElementById("register-success").classList.remove("hidden");
-      registerForm.reset();
-    }
-  });
   
   
 
